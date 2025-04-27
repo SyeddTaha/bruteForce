@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Password Strength Checker</title>
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<script>
+  function numberToWords(num) {
+    if (num === 0) return 'zero';
+
+    const ones = ["", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+    const teens = ["", "eleven", "twelve", "thirteen", "fourteen", "fifteen",
+        "sixteen", "seventeen", "eighteen", "nineteen"];
+    const tens = ["", "ten", "twenty", "thirty", "forty", "fifty",
+        "sixty", "seventy", "eighty", "ninety"];
+    const thousands = ["", "thousand", "million", "billion"];
+
+    function helper(n) {
+        let str = "";
+
+        if (n < 10) str = ones[n];
+        else if (n < 20) str = teens[n - 10];
+        else if (n < 100) str = tens[Math.floor(n / 10)] + (n % 10 !== 0 ? " " + ones[n % 10] : "");
+        else if (n < 1000) str = ones[Math.floor(n / 100)] + " hundred" + (n % 100 !== 0 ? " " + helper(n % 100) : "");
+
+        return str;
+    }
+
+    let result = "";
+    let i = 0;
+
+    while (num > 0) {
+        if (num % 1000 !== 0) {
+            result = helper(num % 1000) + (thousands[i] ? " " + thousands[i] : "") + (result ? " " + result : "");
+        }
+        num = Math.floor(num / 1000);
+        i++;
+    }
+
+    return result.trim();
+}
+
+  function checkStrength(password) {
+    const strengthText = document.getElementById('strengthMessage');
+    let strength = 0;
+  
+    if (password.length >= 6) strength++;
+    if (/[A-Z]/.test(password)) strength++;
+    if (/[0-9]/.test(password)) strength++;
+    if (/[^A-Za-z0-9]/.test(password)) strength++;
+  
+    switch (strength) {
+      case 0:
+      case 1:
+        strengthText.innerText = 'Strength: Weak';
+        strengthText.style.color = 'red';
+        break;
+      case 2:
+        strengthText.innerText = 'Strength: Medium';
+        strengthText.style.color = 'orange';
+        break;
+      case 3:
+      case 4:
+        strengthText.innerText = 'Strength: Strong';
+        strengthText.style.color = 'lime';
+        break;
+    }
+  }
+
+  function mockLogin(password, target) {
+    return password === target;
+}
+
+async function bruteForceAttack(characters, maxLength, target) {
+    const output = document.getElementById("output");
+    let attempts = 0;
+    const startTime = Date.now();
+
+    async function tryCombination(current) {
+        if (current.length > maxLength) return false;
+
+        for (let char of characters) {
+            const guess = current + char;
+            attempts++;
+
+            if (attempts % 100000 === 0) {
+                const elapsed = ((Date.now() - startTime) / 1000).toFixed(2);
+                output.innerHTML = `Trying: ${guess} <br>Attempts: ${attempts} <br>Time Elapsed: ${elapsed} seconds`;
+                await new Promise(r => setTimeout(r, 1));
+            }
+
+            if (mockLogin(guess, target)) {
+                const totalTime = ((Date.now() - startTime) / 1000).toFixed(2);
+                output.innerHTML = `
+                    Password found: <b>${guess}</b><br>
+                    Total attempts: ${attempts}<br>
+                    Total attempts: ${numberToWords(attempts)} attempts<br>
+                    Time taken: ${totalTime} seconds
+                `;
+                return true;
+            }
+
+            if (await tryCombination(guess)) return true;
+        }
+
+        return false;
+    }
+
+    output.innerHTML = "Starting brute-force...";
+    const found = await tryCombination("");
+    if (!found) {
+        const totalTime = ((Date.now() - startTime) / 1000).toFixed(2);
+        output.innerHTML += `<br>Password not found.<br>Time taken: ${totalTime} seconds`;
+    }
+}
+
+function startBruteForce() {
+    const password = document.getElementById("userPassword").value.toLowerCase();
+    const characters = "abcdefghijklmnopqrstuvwxyz0123456789";
+    const maxLength = 6; 
+    if (password === "") {
+        output.innerHTML += "Password field cannot be empty";
+        return; // Stop execution
+    }
+    bruteForceAttack(characters, maxLength, password);
+}
+  </script>
+  
+<body>
+<section>
+
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+
+    <div class="signin">
+      <div class="content">
+        <h2>Is your Password strong enough?</h2>
+        <div class="form">
+          <div class="inputBox">
+            <input type="text" id="password" required oninput="checkStrength(this.value)">
+            <i>Password</i>
+            <div id="strengthMessage" style="margin-top: 10px; font-weight: bold;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="signin2">
+      <div class="content">
+        <h2>BruteForce Password</h2>
+        <div class="form">
+          <div class="inputBox">
+            <input type="text" id="userPassword" required>
+            <i>Password</i>
+            <br>
+            <button class="button" type="submit" onclick="startBruteForce()">Brute Force</button>
+            <div id="output" style="margin-top: 10px; font-weight: bold;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </section>
+  
+</body>
+</html>
